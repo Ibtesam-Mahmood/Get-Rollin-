@@ -1,5 +1,6 @@
 package com.example.ibtes.paraplegicapplication;
 
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.v4.app.FragmentActivity;
@@ -9,6 +10,8 @@ import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -51,7 +54,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void getLocation(){
 
-
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         if ( ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
@@ -61,14 +63,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         @Override
                         public void onSuccess(Location location) {
                             if(location != null){
-                                
+                                LatLng latLng =  new LatLng(location.getLatitude(), location.getLongitude());
+                                CameraUpdate update = CameraUpdateFactory.newLatLngZoom(
+                                        latLng,
+                                        15f
+                                );
+                                mMap.moveCamera(update);
                             }
-
+                            else
+                                MapsActivity.printToast("Please enable Location Services", getApplicationContext());
                         }
                     });
-
         }
 
+    }
+
+    public static void printToast(String m, Context context){
+
+        Toast.makeText(context, m, Toast.LENGTH_SHORT).show();
 
     }
 }
