@@ -19,6 +19,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -82,7 +83,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                         latLng,
                                         15f
                                 );
+                                MarkerOptions marker =  new MarkerOptions()
+                                        .position(latLng);
                                 mMap.moveCamera(update);
+                                mMap.addMarker(marker);
                             }
                         }
                     });
