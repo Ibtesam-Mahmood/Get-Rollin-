@@ -1,11 +1,14 @@
 package com.example.ibtes.paraplegicapplication;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -52,11 +55,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    //Locates the current location for the user and moves the map to the location
     private void getLocation(){
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
+        //Checks if the permission is granted
         if ( ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    1);
+            getLocation();
+            return;
+
+        }
+        else{ //If the permission is granted
 
             mFusedLocationClient.getLastLocation()
                     .addOnSuccessListener(this, new OnSuccessListener<Location>() {
@@ -70,14 +84,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 );
                                 mMap.moveCamera(update);
                             }
-                            else
-                                MapsActivity.printToast("Please enable Location Services", getApplicationContext());
                         }
                     });
         }
 
     }
 
+    //Prints a msg as a toast
     public static void printToast(String m, Context context){
 
         Toast.makeText(context, m, Toast.LENGTH_SHORT).show();
