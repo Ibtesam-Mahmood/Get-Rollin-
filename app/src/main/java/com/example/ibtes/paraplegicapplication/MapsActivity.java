@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.yelp.fusion.client.connection.YelpFusionApi;
 import com.yelp.fusion.client.connection.YelpFusionApiFactory;
+import com.yelp.fusion.client.models.Coordinates;
 import com.yelp.fusion.client.models.SearchResponse;
 
 import java.io.IOException;
@@ -131,8 +132,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
                 SearchResponse searchResponse = response.body();
-                if(searchResponse != null)
-                    Log.e("Mayo", searchResponse.getBusinesses().get(0).getName());
+                if(searchResponse != null){
+                    Coordinates coordinates =  searchResponse.getBusinesses().get(0).getCoordinates();
+                    String companyName = searchResponse.getBusinesses().get(0).getName();
+
+                    LatLng markerLocation = new LatLng(coordinates.getLatitude(), coordinates.getLongitude());
+
+                    MarkerOptions marker =  new MarkerOptions()
+                            .position(markerLocation)
+                            .title(companyName);
+                    mMap.addMarker(marker);
+                }
+
 
             }
             @Override
