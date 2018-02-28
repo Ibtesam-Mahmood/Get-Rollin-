@@ -132,7 +132,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
                 SearchResponse searchResponse = response.body();
                 if(searchResponse != null)
-                    Log.e("Mayo", searchResponse.getBusinesses() + "");
+                    Log.e("Mayo", searchResponse.getBusinesses().get(0).getName());
 
             }
             @Override
