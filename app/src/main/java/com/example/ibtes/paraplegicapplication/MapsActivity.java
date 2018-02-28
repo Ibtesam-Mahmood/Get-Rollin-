@@ -23,6 +23,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.yelp.fusion.client.connection.YelpFusionApi;
 import com.yelp.fusion.client.connection.YelpFusionApiFactory;
+import com.yelp.fusion.client.models.Business;
 import com.yelp.fusion.client.models.Coordinates;
 import com.yelp.fusion.client.models.SearchResponse;
 
@@ -122,7 +123,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Map<String, String> params =  new HashMap<>();
 
-        params.put("term", "food");
+        params.put("term", "coffee");
         params.put("latitude", latLng.latitude + "");
         params.put("longitude", latLng.longitude + "");
 
@@ -133,15 +134,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
                 SearchResponse searchResponse = response.body();
                 if(searchResponse != null){
-                    Coordinates coordinates =  searchResponse.getBusinesses().get(0).getCoordinates();
-                    String companyName = searchResponse.getBusinesses().get(0).getName();
+                    for (int i = 0; i < 5; i++){
+                        Business tempBusiness = searchResponse.getBusinesses().get(i);
 
-                    LatLng markerLocation = new LatLng(coordinates.getLatitude(), coordinates.getLongitude());
+                        Coordinates coordinates =  tempBusiness.getCoordinates();
+                        String companyName = tempBusiness.getName();
 
-                    MarkerOptions marker =  new MarkerOptions()
-                            .position(markerLocation)
-                            .title(companyName);
-                    mMap.addMarker(marker);
+                        LatLng markerLocation = new LatLng(coordinates.getLatitude(), coordinates.getLongitude());
+
+                        MarkerOptions marker =  new MarkerOptions()
+                                .position(markerLocation)
+                                .title(companyName);
+                        mMap.addMarker(marker);
+                    }
                 }
 
 
