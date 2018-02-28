@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Paraplegic Application</string>
     <string name="title_activity_maps">Paraplegia</string>
+    <string name="yelp_fusion_api_key">L0DcwPpcEODFRvV8lrEwfChlt7tWqapsVxawqrMtgo-FS8mkci7bPtYmHN2y34R_emkMTVAMa9YHGCGqlm8PEsMGzG2k2fz9O_Anrh4wGJ66xP5PmTgcQplJBRqQWnYx</string>
 </resources>

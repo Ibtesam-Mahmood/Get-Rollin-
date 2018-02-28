@@ -21,12 +21,25 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.yelp.fusion.client.connection.YelpFusionApi;
+import com.yelp.fusion.client.connection.YelpFusionApiFactory;
+import com.yelp.fusion.client.models.SearchResponse;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
     private FusedLocationProviderClient mFusedLocationClient;
+
+    private YelpFusionApi yelpFusionApi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +49,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        String yelpApiKey = getString(R.string.yelp_fusion_api_key);
+
+        try {
+            yelpFusionApi =  new YelpFusionApiFactory().createAPI(yelpApiKey);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -87,10 +109,40 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                         .position(latLng);
                                 mMap.moveCamera(update);
                                 mMap.addMarker(marker);
+                                yelpMarker(latLng);
                             }
                         }
                     });
         }
+
+    }
+
+    public void yelpMarker(LatLng latLng){
+
+        Map<String, String> params =  new HashMap<>();
+
+        params.put("term", "food");
+        params.put("latitude", latLng.latitude + "");
+        params.put("longitude", latLng.longitude + "");
+
+        Call<SearchResponse> call = yelpFusionApi.getBusinessSearch(params);
+
+        Callback<SearchResponse> callback = new Callback<SearchResponse>() {
+            @Override
+            public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
+                SearchResponse searchResponse = response.body();
+                if(searchResponse != null)
+                    Log.e("Mayo", searchResponse.getBusinesses() + "");
+
+            }
+            @Override
+            public void onFailure(Call<SearchResponse> call, Throwable t) {
+                // HTTP error happened, do something to handle it.
+            }
+        };
+
+        call.enqueue(callback);
+
 
     }
 
