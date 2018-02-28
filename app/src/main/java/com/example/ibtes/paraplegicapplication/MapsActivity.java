@@ -18,6 +18,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -108,7 +109,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                         12f
                                 );
                                 MarkerOptions marker =  new MarkerOptions()
-                                        .position(latLng);
+                                        .position(latLng)
+                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                                 mMap.moveCamera(update);
                                 mMap.addMarker(marker);
                                 yelpMarker(latLng);
@@ -123,7 +125,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Map<String, String> params =  new HashMap<>();
 
-        params.put("term", "coffee");
+        params.put("term", "hair cuts");
         params.put("latitude", latLng.latitude + "");
         params.put("longitude", latLng.longitude + "");
 
@@ -134,7 +136,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
                 SearchResponse searchResponse = response.body();
                 if(searchResponse != null){
-                    for (int i = 0; i < 5; i++){
+                    for (int i = 0; i < searchResponse.getBusinesses().size(); i++){
                         Business tempBusiness = searchResponse.getBusinesses().get(i);
 
                         Coordinates coordinates =  tempBusiness.getCoordinates();
