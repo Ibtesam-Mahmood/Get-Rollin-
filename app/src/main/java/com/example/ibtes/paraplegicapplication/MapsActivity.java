@@ -26,9 +26,12 @@ import com.yelp.fusion.client.connection.YelpFusionApi;
 import com.yelp.fusion.client.connection.YelpFusionApiFactory;
 import com.yelp.fusion.client.models.Business;
 import com.yelp.fusion.client.models.Coordinates;
+import com.yelp.fusion.client.models.Review;
+import com.yelp.fusion.client.models.Reviews;
 import com.yelp.fusion.client.models.SearchResponse;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -103,7 +106,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         @Override
                         public void onSuccess(Location location) {
                             if(location != null){
-                                LatLng latLng =  new LatLng(location.getLatitude(), location.getLongitude());
+                                //LatLng latLng =  new LatLng(location.getLatitude(), location.getLongitude());
+                                LatLng latLng =  new LatLng(40.762, -73.984);
+
                                 CameraUpdate update = CameraUpdateFactory.newLatLngZoom(
                                         latLng,
                                         12f
@@ -125,7 +130,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         Map<String, String> params =  new HashMap<>();
 
-        params.put("term", "hair cuts");
+        params.put("term", "sport");
         params.put("latitude", latLng.latitude + "");
         params.put("longitude", latLng.longitude + "");
 
@@ -148,6 +153,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 .position(markerLocation)
                                 .title(companyName);
                         mMap.addMarker(marker);
+
+                        if(i == 1){
+                            Log.e("yoyo", tempBusiness.getName() + ": " + tempBusiness.getReviewCount());
+                            busReviews(tempBusiness.getId());
+                        }
                     }
                 }
 
@@ -161,6 +171,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         call.enqueue(callback);
 
+
+    }
+
+    private void busReviews(String id){
+
+
+        Call<Reviews> call = yelpFusionApi.getBusinessReviews(id, "");
+
+        Callback<Reviews> callback = new Callback<Reviews>() {
+            @Override
+            public void onResponse(Call<Reviews> call, Response<Reviews> response) {
+                ArrayList<Review> reviewList = response.body().getReviews();
+
+                if(reviewList.size() > 0){
+                    Review tempReview =  reviewList.get(0);
+
+                    Log.e("yoyo", "Rating: " + tempReview.getRating());
+                    Log.e("yoyo", "Review: " + tempReview.getText());
+
+                }
+
+            }
+            @Override
+            public void onFailure(Call<Reviews> call, Throwable t) {
+                // HTTP error happened, do something to handle it.
+            }
+        };
+
+        call.enqueue(callback);
 
     }
 
