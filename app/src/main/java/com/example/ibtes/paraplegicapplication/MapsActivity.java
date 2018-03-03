@@ -106,8 +106,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         @Override
                         public void onSuccess(Location location) {
                             if(location != null){
-                                //LatLng latLng =  new LatLng(location.getLatitude(), location.getLongitude());
-                                LatLng latLng =  new LatLng(40.762, -73.984);
+                                LatLng latLng =  new LatLng(location.getLatitude(), location.getLongitude());
+                                //LatLng latLng =  new LatLng(40.762, -73.984);
 
                                 CameraUpdate update = CameraUpdateFactory.newLatLngZoom(
                                         latLng,
