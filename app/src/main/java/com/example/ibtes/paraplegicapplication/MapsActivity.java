@@ -35,6 +35,7 @@ import com.yelp.fusion.client.models.SearchResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -50,6 +51,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private YelpFusionApi yelpFusionApi;
 
     private LatLng position = null;
+
+    private LinkedList<MarkerOptions> markerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +71,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             e.printStackTrace();
         }
 
+        markerList = new LinkedList<MarkerOptions>();
     }
 
 
@@ -143,6 +147,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Callback<SearchResponse> callback = new Callback<SearchResponse>() {
             @Override
             public void onResponse(Call<SearchResponse> call, Response<SearchResponse> response) {
+
+                deleteMarkers();
+
                 SearchResponse searchResponse = response.body();
                 if(searchResponse != null){
                     for (int i = 0; i < searchResponse.getBusinesses().size(); i++){
@@ -156,6 +163,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         MarkerOptions marker =  new MarkerOptions()
                                 .position(markerLocation)
                                 .title(companyName);
+                        markerList.add(marker);
                         mMap.addMarker(marker);
 
                         if(i == 1){
@@ -169,7 +177,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
             @Override
             public void onFailure(Call<SearchResponse> call, Throwable t) {
-                // HTTP error happened, do something to handle it.
+                printToast("No results found", getApplicationContext());
             }
         };
 
@@ -177,6 +185,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     }
+
+    public void deleteMarkers(){
+
+        mMap.clear();
+        getLocation();
+
+    }
+
 
     private void busReviews(String id){
 
