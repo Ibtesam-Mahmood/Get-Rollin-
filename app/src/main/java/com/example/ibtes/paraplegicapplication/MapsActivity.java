@@ -9,6 +9,8 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -46,6 +48,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private FusedLocationProviderClient mFusedLocationClient;
 
     private YelpFusionApi yelpFusionApi;
+
+    private LatLng position = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,7 +122,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                                 mMap.moveCamera(update);
                                 mMap.addMarker(marker);
-                                yelpMarker(latLng);
+                                position = latLng;
                             }
                         }
                     });
@@ -126,13 +130,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    public void yelpMarker(LatLng latLng){
+    public void yelpMarker(String term){
 
         Map<String, String> params =  new HashMap<>();
 
-        params.put("term", "sport");
-        params.put("latitude", latLng.latitude + "");
-        params.put("longitude", latLng.longitude + "");
+        params.put("term", term);
+        params.put("latitude", position.latitude + "");
+        params.put("longitude", position.longitude + "");
 
         Call<SearchResponse> call = yelpFusionApi.getBusinessSearch(params);
 
@@ -207,6 +211,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public static void printToast(String m, Context context){
 
         Toast.makeText(context, m, Toast.LENGTH_SHORT).show();
+
+    }
+
+    public void searchPressed(View v){
+
+        EditText editText = findViewById(R.id.searchBar);
+
+        String text = editText.getText().toString();
+
+        if(text.isEmpty()){
+            printToast("Search bar is empty", this);
+        }
+        else {
+            yelpMarker(text);
+        }
+
 
     }
 }
