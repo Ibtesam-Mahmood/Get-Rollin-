@@ -21,7 +21,7 @@
             android:id="@+id/searchBar"
             android:layout_width="277dp"
             android:layout_height="54dp"
-            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
             android:layout_marginTop="16dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
