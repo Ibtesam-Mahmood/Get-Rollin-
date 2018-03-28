@@ -10,6 +10,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -46,6 +48,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+
+
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
 
@@ -63,12 +68,24 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private LinkedList<MarkerOptions> markerList;
 
+    private Menu menuClass = new Menu();
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mToggle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps);
+               setContentView(R.layout.activity_maps);
+      //  mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
+      //  mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
+     //   mDrawerLayout.addDrawerListener(mToggle);
+      //  mToggle.syncState();
+
+       // menuClass.menu();
+
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+       SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -269,9 +286,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    public void searchPressed(View v){
+
+    public void menuPressed(View v){
 
         EditText editText = findViewById(R.id.searchBar);
+
+        String text = editText.getText().toString();
+
+        if(text.isEmpty()){
+            printToast("Search bar is empty", this);
+        }
+        else {
+            yelpMarker(text);
+        }
+
+        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
+
+    }
+
+    public void searchPressed(View v){
+
+       EditText editText = findViewById(R.id.searchBar);
 
         String text = editText.getText().toString();
 
