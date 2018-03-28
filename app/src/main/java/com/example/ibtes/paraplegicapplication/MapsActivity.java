@@ -146,6 +146,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 if(firstTime)
                                     yelpMarker("Athletics");
                             }
+                            else{
+                                printToast("Please Enable Location", getApplicationContext());
+                                position = null;
+                            }
                         }
                     });
         }
@@ -157,8 +161,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Map<String, String> params =  new HashMap<>();
 
         params.put("term", term);
-        params.put("latitude", position.latitude + "");
-        params.put("longitude", position.longitude + "");
+
+        if(position != null) {
+            params.put("latitude", position.latitude + "");
+            params.put("longitude", position.longitude + "");
+        }
 
         Call<SearchResponse> call = yelpFusionApi.getBusinessSearch(params);
 
@@ -206,7 +213,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         };
 
-        call.enqueue(callback);
+        if(position != null) {
+            call.enqueue(callback);
+        }
 
 
     }
