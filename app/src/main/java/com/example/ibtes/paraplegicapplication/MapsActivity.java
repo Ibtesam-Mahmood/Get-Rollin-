@@ -36,6 +36,7 @@ import com.yelp.fusion.client.models.Reviews;
 import com.yelp.fusion.client.models.SearchResponse;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -46,6 +47,11 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+
+
+    public interface ResponseCallBack{
+        void onResponse(ArrayList<Review> response);
+    }
 
     private GoogleMap mMap;
 
@@ -129,7 +135,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                                 mMap.moveCamera(update);
                                 mMap.addMarker(marker);
+
+                                boolean firstTime = false;
+
+                                if(position == null)
+                                    firstTime = true;
+
                                 position = latLng;
+
+                                if(firstTime)
+                                    yelpMarker("Athletics");
                             }
                         }
                     });
@@ -158,21 +173,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     for (int i = 0; i < searchResponse.getBusinesses().size(); i++){
                         Business tempBusiness = searchResponse.getBusinesses().get(i);
 
+                        Log.e("name", tempBusiness.getName());
+
                         Coordinates coordinates =  tempBusiness.getCoordinates();
                         String companyName = tempBusiness.getName();
 
                         LatLng markerLocation = new LatLng(coordinates.getLatitude(), coordinates.getLongitude());
 
-                        MarkerOptions marker =  new MarkerOptions()
+                        final MarkerOptions marker =  new MarkerOptions()
                                 .position(markerLocation)
                                 .title(companyName);
-                        markerList.add(marker);
-                        mMap.addMarker(marker);
 
-                        if(i == 1){
-                            Log.e("yoyo", tempBusiness.getName() + ": " + tempBusiness.getReviewCount());
-                            busReviews(tempBusiness.getId());
-                        }
+                        final ResponseCallBack callBack = new ResponseCallBack() {
+
+                            @Override
+                            public void onResponse(ArrayList<Review> response) {
+                                setColorAndPost(marker, response, "rut");
+                            }
+
+                        };
+
+                        busReviews(tempBusiness.getId(), callBack);
+
                     }
                 }
 
@@ -189,6 +211,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    public void setColorAndPost(MarkerOptions marker, ArrayList<Review> busRew, String search){
+
+        for (int i = 0; i < busRew.size(); i++){
+
+            String reviewContent = busRew.get(i).getText().toLowerCase();
+            search = search.toLowerCase();
+
+            Log.e("text", reviewContent);
+
+            boolean contains = reviewContent.contains(search);
+
+            if(contains)
+                marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+
+        }
+
+        markerList.add(marker);
+        mMap.addMarker(marker);
+
+    }
+
     public void deleteMarkers(){
 
         mMap.clear();
@@ -197,7 +240,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    private void busReviews(String id){
+    private void busReviews(String id, final ResponseCallBack callBack){
 
 
         Call<Reviews> call = yelpFusionApi.getBusinessReviews(id, "");
@@ -205,15 +248,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Callback<Reviews> callback = new Callback<Reviews>() {
             @Override
             public void onResponse(Call<Reviews> call, Response<Reviews> response) {
-                ArrayList<Review> reviewList = response.body().getReviews();
-
-                if(reviewList.size() > 0){
-                    Review tempReview =  reviewList.get(0);
-
-                    Log.e("yoyo", "Rating: " + tempReview.getRating());
-                    Log.e("yoyo", "Review: " + tempReview.getText());
-
-                }
+                callBack.onResponse( response.body().getReviews() );
 
             }
             @Override
@@ -223,6 +258,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         };
 
         call.enqueue(callback);
+
 
     }
 
