@@ -3,6 +3,7 @@ package com.example.ibtes.paraplegicapplication;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.inputmethodservice.Keyboard;
 import android.location.Location;
@@ -68,26 +69,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private LinkedList<MarkerOptions> markerList;
 
-    private Menu menuClass = new Menu();
-    private DrawerLayout mDrawerLayout;
-    private ActionBarDrawerToggle mToggle;
+   private Menu menuClass = new Menu();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-               setContentView(R.layout.activity_maps);
-      //  mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
-      //  mToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open, R.string.close);
-     //   mDrawerLayout.addDrawerListener(mToggle);
-      //  mToggle.syncState();
-
-       // menuClass.menu();
-
+        setContentView(R.layout.activity_maps);
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
 
         String yelpApiKey = getString(R.string.yelp_fusion_api_key);
 
@@ -98,6 +91,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         markerList = new LinkedList<MarkerOptions>();
+
+
+
+    }
+
+    public void switchActivity(){
+        Log.e("YOYO", "switched");
+        startActivity(new Intent(this,Menu.class));
     }
 
 
@@ -209,23 +210,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             }
 
                         };
-
                         busReviews(tempBusiness.getId(), callBack);
-
                     }
                 }
-
-
             }
             @Override
             public void onFailure(Call<SearchResponse> call, Throwable t) {
                 printToast("No results found", getApplicationContext());
             }
         };
-
         call.enqueue(callback);
-
-
     }
 
     public void setColorAndPost(MarkerOptions marker, ArrayList<Review> busRew, String search){
@@ -287,25 +281,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    public void menuPressed(View v){
-
-        EditText editText = findViewById(R.id.searchBar);
-
-        String text = editText.getText().toString();
-
-        if(text.isEmpty()){
-            printToast("Search bar is empty", this);
-        }
-        else {
-            yelpMarker(text);
-        }
-
-        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-
-
-    }
-
     public void searchPressed(View v){
 
        EditText editText = findViewById(R.id.searchBar);
@@ -314,13 +289,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         if(text.isEmpty()){
             printToast("Search bar is empty", this);
+            Log.e("YOYO", "switched");
+            switchActivity();
         }
         else {
             yelpMarker(text);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
         }
-
-        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
 
 
     }
