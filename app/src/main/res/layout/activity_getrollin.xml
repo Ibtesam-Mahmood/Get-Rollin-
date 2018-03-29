@@ -59,24 +59,27 @@
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColorHint="@android:color/black">
+                android:textColorHint="@android:color/black"
+                android:focusable="false">
 
                 <AutoCompleteTextView
                     android:id="@+id/email"
-                    android:fontFamily="@font/orbitron"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/orbitron"
                     android:hint="@string/prompt_email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:singleLine="true"
-                    android:visibility="visible" />
+                    android:visibility="visible"
+                    tools:text="imahmoo@uwo.ca" />
 
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:focusable="false">
 
                 <EditText
                     android:id="@+id/password"
@@ -90,6 +93,7 @@
 
                     android:maxLines="1"
                     android:singleLine="true"
+                    android:text="***********"
                     android:textColor="@android:color/black" />
 
             </android.support.design.widget.TextInputLayout>
