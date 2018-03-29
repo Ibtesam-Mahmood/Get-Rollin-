@@ -3,11 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Paraplegic-Hobby-App.iml" filepath="$PROJECT_DIR$/Paraplegic-Hobby-App.iml" />
-      <module fileurl="file://C:\Users\yusra\Documents\GitHub\Paraplegic-Hobby-App\Paraplegic-Hobby-App.iml" filepath="C:\Users\yusra\Documents\GitHub\Paraplegic-Hobby-App\Paraplegic-Hobby-App.iml" />
       <module fileurl="file://C:\Users\ibtes\Documents\AndroidStudioProjects\Paraplegic_App\Paraplegic-Hobby-App.iml" filepath="C:\Users\ibtes\Documents\AndroidStudioProjects\Paraplegic_App\Paraplegic-Hobby-App.iml" />
       <module fileurl="file://C:\Users\User\Documents\Android\Paraplegic-Hobby-App\Paraplegic_App.iml" filepath="C:\Users\User\Documents\Android\Paraplegic-Hobby-App\Paraplegic_App.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\yusra\Documents\GitHub\Paraplegic-Hobby-App\app\app.iml" filepath="C:\Users\yusra\Documents\GitHub\Paraplegic-Hobby-App\app\app.iml" />
     </modules>
   </component>
 </project>

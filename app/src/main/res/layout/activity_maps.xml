@@ -24,9 +24,11 @@
 
     <android.support.v7.widget.AppCompatEditText
         android:id="@+id/searchBar"
-        android:layout_width="207dp"
+        android:layout_width="199dp"
         android:layout_height="54dp"
         android:layout_marginTop="16dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="10dp"
         app:layout_constraintEnd_toStartOf="@id/button2"
         app:layout_constraintStart_toEndOf="@id/menu1"
         app:layout_constraintTop_toTopOf="parent" />
