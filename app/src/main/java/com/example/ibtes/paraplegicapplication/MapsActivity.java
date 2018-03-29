@@ -3,15 +3,19 @@ package com.example.ibtes.paraplegicapplication;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -44,6 +48,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+
+
+
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
 
@@ -65,14 +72,29 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private EditText mEditText;
 
+
+   private Button menuB;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_maps);
+        menuB=findViewById(R.id.menu1);
+        menuB.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+                startActivity(new Intent(MapsActivity.this, MenuActivity.class));
+             }
+        });
+
+
+
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+       SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
 
         String yelpApiKey = getString(R.string.yelp_fusion_api_key);
 
@@ -105,6 +127,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
+<<<<<<< HEAD
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -141,6 +164,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
 
 
+=======
+>>>>>>> Signin
         getLocation();
 
     }
@@ -245,25 +270,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             }
 
                         };
-
                         busReviews(tempBusiness.getId(), callBack);
-
                     }
                 }
-
-
             }
             @Override
             public void onFailure(Call<SearchResponse> call, Throwable t) {
                 printToast("No results found", getApplicationContext());
             }
         };
+<<<<<<< HEAD
 
         if(position != null) {
             call.enqueue(callback);
         }
 
 
+=======
+        call.enqueue(callback);
+>>>>>>> Signin
     }
 
     public void setColorAndPost(MarkerOptions marker, ArrayList<Review> busRew, String search){
@@ -318,14 +343,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onResponse(Call<Reviews> call, Response<Reviews> response) {
                 callBack.onResponse( response.body().getReviews() );
-
             }
             @Override
             public void onFailure(Call<Reviews> call, Throwable t) {
                 // HTTP error happened, do something to handle it.
             }
         };
-
         call.enqueue(callback);
 
 
@@ -347,22 +370,30 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     //Prints a msg as a toast
     public static void printToast(String m, Context context){
-
         Toast.makeText(context, m, Toast.LENGTH_SHORT).show();
-
     }
 
     public void searchPressed(View v){
 
+<<<<<<< HEAD
         String text = mEditText.getText().toString();
+=======
+       EditText editText = findViewById(R.id.searchBar);
+
+        String text = editText.getText().toString();
+>>>>>>> Signin
 
         if(text.isEmpty()){
             printToast("Search bar is empty", this);
+
         }
         else {
             yelpMarker(text);
+            InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
         }
 
+<<<<<<< HEAD
         releaseFocus();
 
     }
@@ -375,4 +406,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     };
 
+=======
+
+    }
+    public void switchMenu(){
+        setContentView(R.layout.activity_menu);
+    }
+    public void switchBack(){
+        setContentView(R.layout.activity_maps);
+    }
+>>>>>>> Signin
 }
