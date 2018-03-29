@@ -43,7 +43,7 @@ public class SlideView extends ScrollView {
 
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
+                ViewGroup.LayoutParams.WRAP_CONTENT
         );
 
         mlinearLayout.setPadding(0,0,0,100);
