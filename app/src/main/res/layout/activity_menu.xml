@@ -31,17 +31,19 @@
 
         tools:ignore="MissingConstraints" />
 
-    <EditText
+    <TextView
         android:id="@+id/profile"
         android:layout_width="fill_parent"
         android:layout_height="300dp"
         android:layout_alignParentLeft="true"
-        app:layout_constraintBottom_toTopOf="@id/logOutB"
-        android:layout_marginTop="0dp"
-
         android:background="@android:color/holo_green_light"
-        android:textAlignment="center"
         android:text="PROFILE"
-        />
+        android:textAlignment="center"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toTopOf="@id/logOutB"
+        tools:layout_editor_absoluteX="63dp"
+        tools:ignore="MissingConstraints" />
+
+
 
 </android.support.constraint.ConstraintLayout>

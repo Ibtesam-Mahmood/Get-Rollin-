@@ -44,6 +44,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -262,6 +263,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 phrases.add("para");
                                 phrases.add("disable");
                                 phrases.add("assist");
+                                phrases.add("body");
 
                                 setColorAndPost(marker, response, phrases);
 
