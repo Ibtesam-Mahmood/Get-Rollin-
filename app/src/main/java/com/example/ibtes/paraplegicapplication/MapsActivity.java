@@ -254,7 +254,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             @Override
                             public void onResponse(ArrayList<Review> response) {
 
-                                setColorAndPost(marker, response, "this");
+                                setColorAndPost(marker, response, "wheelchair");
 
                             }
 
