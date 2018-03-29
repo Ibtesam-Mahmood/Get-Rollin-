@@ -31,7 +31,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".getrollin"
             android:label="@string/title_activity_maps">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MenuActivity"></activity>
-        <activity android:name=".getrollin" />
+        <activity android:name=".MapsActivity" />
     </application>
 
 </manifest>
