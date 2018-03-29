@@ -16,6 +16,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -69,12 +70,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private LinkedList<MarkerOptions> markerList;
 
-   private Menu menuClass = new Menu();
+
+   private Button menuB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_maps);
+        menuB=findViewById(R.id.menu1);
+        menuB.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View view) {
+            startActivity(new Intent(MapsActivity.this, MenuActivity.class));
+    }
+});
+
+
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -96,11 +108,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    public void switchActivity(){
-        Log.e("YOYO", "switched");
-        startActivity(new Intent(this,Menu.class));
-    }
-
 
     /**
      * Manipulates the map once available.
@@ -114,7 +121,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         getLocation();
 
     }
@@ -260,14 +266,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onResponse(Call<Reviews> call, Response<Reviews> response) {
                 callBack.onResponse( response.body().getReviews() );
-
             }
             @Override
             public void onFailure(Call<Reviews> call, Throwable t) {
                 // HTTP error happened, do something to handle it.
             }
         };
-
         call.enqueue(callback);
 
 
@@ -275,11 +279,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     //Prints a msg as a toast
     public static void printToast(String m, Context context){
-
         Toast.makeText(context, m, Toast.LENGTH_SHORT).show();
-
     }
-
 
     public void searchPressed(View v){
 
@@ -289,8 +290,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         if(text.isEmpty()){
             printToast("Search bar is empty", this);
-            Log.e("YOYO", "switched");
-            switchActivity();
+
         }
         else {
             yelpMarker(text);
@@ -299,5 +299,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
 
+    }
+    public void switchMenu(){
+        setContentView(R.layout.activity_menu);
+    }
+    public void switchBack(){
+        setContentView(R.layout.activity_maps);
     }
 }
