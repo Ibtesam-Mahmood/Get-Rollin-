@@ -80,7 +80,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             e.printStackTrace();
         }
 
-        markerList = new LinkedList<MarkerOptions>();
+        markerList = new LinkedList<>();
     }
 
 
