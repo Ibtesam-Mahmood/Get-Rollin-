@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -43,7 +44,7 @@ public class SlideView extends ScrollView {
 
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT
+                ViewGroup.LayoutParams.WRAP_CONTENT
         );
 
         mlinearLayout.setPadding(0,0,0,100);
@@ -57,10 +58,12 @@ public class SlideView extends ScrollView {
 
     public void createAndAdd(String name, String review){
 
+        Log.e("TEST", review);
+
         ReviewLayout rLayout = new ReviewLayout(getContext(), name.replace(".", ":  "), review);
 
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         );
 

@@ -192,10 +192,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                         12f
                                 );
                                 MarkerOptions marker = new MarkerOptions()
-                                        .position(latLng)
-                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                                        .position(latLng);
+
                                 mMap.moveCamera(update);
-                                mMap.addMarker(marker);
 
                                 boolean firstTime = false;
 

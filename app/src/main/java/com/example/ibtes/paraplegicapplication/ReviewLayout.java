@@ -20,7 +20,7 @@ public class ReviewLayout extends LinearLayout {
 
     private TextView mName =  new TextView(getContext());
     private TextView mReview =  new TextView(getContext());
-   // private TextView name;
+
 
     public ReviewLayout(Context context, String name, String review) {
         super(context);
