@@ -72,8 +72,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private EditText mEditText;
 
-
-   private Button menuB;
+    private Button menuB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,8 +87,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
              }
         });
 
-
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -103,7 +100,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
         mSlideView = findViewById(R.id.miniBar);
 
@@ -127,7 +123,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-<<<<<<< HEAD
 
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -163,9 +158,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-
-=======
->>>>>>> Signin
         getLocation();
 
     }
@@ -279,16 +271,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 printToast("No results found", getApplicationContext());
             }
         };
-<<<<<<< HEAD
-
         if(position != null) {
             call.enqueue(callback);
         }
 
-
-=======
-        call.enqueue(callback);
->>>>>>> Signin
     }
 
     public void setColorAndPost(MarkerOptions marker, ArrayList<Review> busRew, String search){
@@ -375,13 +361,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void searchPressed(View v){
 
-<<<<<<< HEAD
         String text = mEditText.getText().toString();
-=======
-       EditText editText = findViewById(R.id.searchBar);
-
-        String text = editText.getText().toString();
->>>>>>> Signin
 
         if(text.isEmpty()){
             printToast("Search bar is empty", this);
@@ -393,7 +373,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
         }
 
-<<<<<<< HEAD
         releaseFocus();
 
     }
@@ -406,8 +385,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     };
 
-=======
-
     }
     public void switchMenu(){
         setContentView(R.layout.activity_menu);
@@ -415,5 +392,4 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void switchBack(){
         setContentView(R.layout.activity_maps);
     }
->>>>>>> Signin
 }
