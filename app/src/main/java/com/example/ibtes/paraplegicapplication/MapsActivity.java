@@ -40,6 +40,7 @@ import com.yelp.fusion.client.models.Reviews;
 import com.yelp.fusion.client.models.SearchResponse;
 
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -254,7 +255,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             @Override
                             public void onResponse(ArrayList<Review> response) {
 
-                                setColorAndPost(marker, response, "wheelchair");
+                                ArrayList<String> phrases = new ArrayList<>();
+
+                                phrases.add("wheelchair");
+                                phrases.add("accessible");
+                                phrases.add("para");
+                                phrases.add("disable");
+                                phrases.add("assist");
+
+                                setColorAndPost(marker, response, phrases);
 
                             }
 
@@ -275,19 +284,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    public void setColorAndPost(MarkerOptions marker, ArrayList<Review> busRew, String search) {
+    public void setColorAndPost(MarkerOptions marker, ArrayList<Review> busRew, ArrayList<String> search) {
 
 
         for (int i = 0; i < busRew.size(); i++) {
 
 
-            String reviewContent = busRew.get(i).getText().toLowerCase();
-            search = search.toLowerCase();
+            for(int n = 0; n < search.size(); n++){
 
-            boolean contains = reviewContent.contains(search);
+                String reviewContent = busRew.get(i).getText().toLowerCase();
+                String phrase = search.get(n).toLowerCase();
 
-            if (contains)
-                marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                boolean contains = reviewContent.contains(phrase);
+
+                if (contains) {
+                    marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+                    break;
+                }
+            }
+
+            if(marker.getIcon() == BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                break;
 
         }
 
