@@ -5,9 +5,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 /**
@@ -16,6 +16,7 @@ import android.widget.ScrollView;
 
 public class SlideView extends ScrollView {
 
+    private LinearLayout mlinearLayout;
 
     public SlideView(Context context) {
         super(context);
@@ -38,11 +39,31 @@ public class SlideView extends ScrollView {
 
     public void init(@Nullable AttributeSet set){
 
+        mlinearLayout = new LinearLayout(getContext());
+
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT
+        );
+
+        mlinearLayout.setLayoutParams(params);
+
+        mlinearLayout.setOrientation(LinearLayout.VERTICAL);
+
+        addView(mlinearLayout);
+
+        for(int i = 0; i < 5; i++){
+            Button button =  new Button(getContext());
+            button.setLayoutParams(params);
+
+            mlinearLayout.addView(button);
+        }
+
     }
 
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawColor(Color.RED);
+        canvas.drawColor(Color.WHITE);
     }
 }
