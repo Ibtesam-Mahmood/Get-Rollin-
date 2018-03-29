@@ -46,6 +46,7 @@ public class SlideView extends ScrollView {
                 ViewGroup.LayoutParams.MATCH_PARENT
         );
 
+        mlinearLayout.setPadding(0,0,0,100);
         mlinearLayout.setLayoutParams(params);
 
         mlinearLayout.setOrientation(LinearLayout.VERTICAL);
@@ -56,7 +57,14 @@ public class SlideView extends ScrollView {
 
     public void createAndAdd(String name, String review){
 
-        ReviewLayout rLayout = new ReviewLayout(getContext(), name, review);
+        ReviewLayout rLayout = new ReviewLayout(getContext(), name.replace(".", ":  "), review);
+
+        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+        );
+
+        rLayout.setLayoutParams(params);
 
         mlinearLayout.addView(rLayout);
 

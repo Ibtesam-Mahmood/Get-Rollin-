@@ -1,18 +1,21 @@
 package com.example.ibtes.paraplegicapplication;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
  * Created by User on 3/29/2018.
  */
 
-public class ReviewLayout extends ConstraintLayout {
+public class ReviewLayout extends LinearLayout {
 
 
     private TextView mName =  new TextView(getContext());
@@ -44,9 +47,11 @@ public class ReviewLayout extends ConstraintLayout {
 
 
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT
         );
+
+        mName.setTextSize(18);
 
         mName.setLayoutParams(params);
         mReview.setLayoutParams(params);
@@ -56,4 +61,10 @@ public class ReviewLayout extends ConstraintLayout {
 
     }
 
+    @Override
+    protected void onDraw(Canvas canvas) {
+
+        canvas.drawColor(Color.LTGRAY);
+
+    }
 }

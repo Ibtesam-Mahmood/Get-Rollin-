@@ -110,7 +110,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public boolean onMarkerClick(Marker marker) {
 
-                //deleteAndHide();
+                deleteAndHide();
 
                 ArrayList<Review> markerReview = reviewDataBase.get(marker.getTitle());
 
