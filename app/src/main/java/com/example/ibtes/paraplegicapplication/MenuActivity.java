@@ -9,6 +9,7 @@ import android.widget.Button;
 public class MenuActivity extends AppCompatActivity {
 
     private Button backB;
+    private Button logoutB;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -19,6 +20,14 @@ public class MenuActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
             finish();
+            }
+        });
+
+        logoutB=findViewById(R.id.logOutB);
+        logoutB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MenuActivity.this, getrollin.class));
             }
         });
     }
