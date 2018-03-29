@@ -54,7 +54,7 @@ import retrofit2.Response;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
 
-    public interface ResponseCallBack{
+    public interface ResponseCallBack {
         void onResponse(ArrayList<Review> response);
     }
 
@@ -79,16 +79,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_maps);
-        menuB=findViewById(R.id.menu1);
+        menuB = findViewById(R.id.menu1);
         menuB.setOnClickListener(new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
+            @Override
+            public void onClick(View view) {
                 startActivity(new Intent(MapsActivity.this, MenuActivity.class));
-             }
+            }
         });
 
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-       SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -96,7 +96,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         String yelpApiKey = getString(R.string.yelp_fusion_api_key);
 
         try {
-            yelpFusionApi =  new YelpFusionApiFactory().createAPI(yelpApiKey);
+            yelpFusionApi = new YelpFusionApiFactory().createAPI(yelpApiKey);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -132,9 +132,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 ArrayList<Review> markerReview = reviewDataBase.get(marker.getTitle());
 
-                if(markerReview != null && markerReview.size() > 0){
+                if (markerReview != null && markerReview.size() > 0) {
 
-                    obtainReviews( markerReview );
+                    obtainReviews(markerReview);
                 }
 
                 mSlideView.setVisibility(View.VISIBLE);
@@ -164,12 +164,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
 
     //Locates the current location for the user and moves the map to the location
-    private void getLocation(){
+    private void getLocation() {
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         //Checks if the permission is granted
-        if ( ContextCompat.checkSelfPermission( this, android.Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
@@ -177,22 +177,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             getLocation();
             return;
 
-        }
-        else{ //If the permission is granted
+        } else { //If the permission is granted
 
             mFusedLocationClient.getLastLocation()
                     .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                         @Override
                         public void onSuccess(Location location) {
-                            if(location != null){
-                                LatLng latLng =  new LatLng(location.getLatitude(), location.getLongitude());
+                            if (location != null) {
+                                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                                 //LatLng latLng =  new LatLng(40.762, -73.984);
 
                                 CameraUpdate update = CameraUpdateFactory.newLatLngZoom(
                                         latLng,
                                         12f
                                 );
-                                MarkerOptions marker =  new MarkerOptions()
+                                MarkerOptions marker = new MarkerOptions()
                                         .position(latLng)
                                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                                 mMap.moveCamera(update);
@@ -200,15 +199,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                                 boolean firstTime = false;
 
-                                if(position == null)
+                                if (position == null)
                                     firstTime = true;
 
                                 position = latLng;
 
-                                if(firstTime)
+                                if (firstTime)
                                     yelpMarker("Athletics");
-                            }
-                            else{
+                            } else {
                                 printToast("Please Enable Location", getApplicationContext());
                                 position = null;
                             }
@@ -218,13 +216,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    public void yelpMarker(String term){
+    public void yelpMarker(String term) {
 
-        Map<String, String> params =  new HashMap<>();
+        Map<String, String> params = new HashMap<>();
 
         params.put("term", term);
 
-        if(position != null) {
+        if (position != null) {
             params.put("latitude", position.latitude + "");
             params.put("longitude", position.longitude + "");
         }
@@ -238,17 +236,17 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 deleteMarkers();
 
                 SearchResponse searchResponse = response.body();
-                if(searchResponse != null){
-                    for (int i = 0; i < searchResponse.getBusinesses().size(); i++){
+                if (searchResponse != null) {
+                    for (int i = 0; i < searchResponse.getBusinesses().size(); i++) {
                         Business tempBusiness = searchResponse.getBusinesses().get(i);
 
 
-                        Coordinates coordinates =  tempBusiness.getCoordinates();
+                        Coordinates coordinates = tempBusiness.getCoordinates();
                         String companyName = tempBusiness.getName();
 
                         LatLng markerLocation = new LatLng(coordinates.getLatitude(), coordinates.getLongitude());
 
-                        final MarkerOptions marker =  new MarkerOptions()
+                        final MarkerOptions marker = new MarkerOptions()
                                 .position(markerLocation)
                                 .title(companyName);
 
@@ -266,21 +264,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     }
                 }
             }
+
             @Override
             public void onFailure(Call<SearchResponse> call, Throwable t) {
                 printToast("No results found", getApplicationContext());
             }
         };
-        if(position != null) {
+        if (position != null) {
             call.enqueue(callback);
         }
 
     }
 
-    public void setColorAndPost(MarkerOptions marker, ArrayList<Review> busRew, String search){
+    public void setColorAndPost(MarkerOptions marker, ArrayList<Review> busRew, String search) {
 
 
-        for (int i = 0; i < busRew.size(); i++){
+        for (int i = 0; i < busRew.size(); i++) {
 
 
             String reviewContent = busRew.get(i).getText().toLowerCase();
@@ -288,7 +287,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             boolean contains = reviewContent.contains(search);
 
-            if(contains)
+            if (contains)
                 marker.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
 
         }
@@ -300,7 +299,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private void obtainReviews(ArrayList<Review> busRew) {
 
-        for(int i = 0; i < busRew.size(); i++) {
+        for (int i = 0; i < busRew.size(); i++) {
 
             Review tempReview = busRew.get(i);
 
@@ -311,7 +310,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 
-    public void deleteMarkers(){
+    public void deleteMarkers() {
 
         reviewDataBase.clear();
         mMap.clear();
@@ -320,7 +319,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
 
-    private void busReviews(String id, final ResponseCallBack callBack){
+    private void busReviews(String id, final ResponseCallBack callBack) {
 
 
         Call<Reviews> call = yelpFusionApi.getBusinessReviews(id, "");
@@ -328,8 +327,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         Callback<Reviews> callback = new Callback<Reviews>() {
             @Override
             public void onResponse(Call<Reviews> call, Response<Reviews> response) {
-                callBack.onResponse( response.body().getReviews() );
+                callBack.onResponse(response.body().getReviews());
             }
+
             @Override
             public void onFailure(Call<Reviews> call, Throwable t) {
                 // HTTP error happened, do something to handle it.
@@ -340,14 +340,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
-    public void deleteAndHide(){
+    public void deleteAndHide() {
 
         mSlideView.removeAllViews();
         mSlideView.setVisibility(View.GONE);
 
     }
 
-    public void releaseFocus(){
+    public void releaseFocus() {
         InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
 
@@ -355,19 +355,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     //Prints a msg as a toast
-    public static void printToast(String m, Context context){
+    public static void printToast(String m, Context context) {
         Toast.makeText(context, m, Toast.LENGTH_SHORT).show();
     }
 
-    public void searchPressed(View v){
+    public void searchPressed(View v) {
 
         String text = mEditText.getText().toString();
 
-        if(text.isEmpty()){
+        if (text.isEmpty()) {
             printToast("Search bar is empty", this);
 
-        }
-        else {
+        } else {
             yelpMarker(text);
             InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
             imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
@@ -385,7 +384,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     };
 
-    }
     public void switchMenu(){
         setContentView(R.layout.activity_menu);
     }
