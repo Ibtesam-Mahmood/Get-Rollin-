@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.ibtes.paraplegicapplication.MapsActivity">
+    tools:context="com.example.ibtes.paraplegicapplication.MapsActivity"
+    android:focusableInTouchMode="true"
+    android:id="@+id/mainLayout">
 
         <fragment xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:map="http://schemas.android.com/apk/res-auto"
@@ -17,14 +19,15 @@
             tools:context="com.example.ibtes.paraplegicapplication.MapsActivity"
             tools:layout_editor_absoluteY="108dp" />
 
-        <android.support.v7.widget.AppCompatEditText
-            android:id="@+id/searchBar"
-            android:layout_width="277dp"
-            android:layout_height="54dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <android.support.v7.widget.AppCompatEditText
+        android:id="@+id/searchBar"
+        android:layout_width="277dp"
+        android:layout_height="54dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
+        android:focusable="true"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/button2"
@@ -40,7 +43,9 @@
         android:layout_width="match_parent"
         android:layout_height="236dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintStart_toStartOf="parent"
+        android:id="@+id/miniBar"
+        android:visibility="invisible">
 
 
     </com.example.ibtes.paraplegicapplication.SlideView>

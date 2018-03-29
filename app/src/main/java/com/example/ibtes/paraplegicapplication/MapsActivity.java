@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.inputmethodservice.Keyboard;
 import android.location.Location;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
@@ -25,6 +24,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.yelp.fusion.client.connection.YelpFusionApi;
@@ -36,10 +36,8 @@ import com.yelp.fusion.client.models.Reviews;
 import com.yelp.fusion.client.models.SearchResponse;
 
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -53,6 +51,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         void onResponse(ArrayList<Review> response);
     }
 
+    private SlideView mSlideView;
+
     private GoogleMap mMap;
 
     private FusedLocationProviderClient mFusedLocationClient;
@@ -61,7 +61,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     private LatLng position = null;
 
-    private LinkedList<MarkerOptions> markerList;
+    private Map<String, ArrayList<Review>> reviewDataBase;
+
+    private EditText mEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +82,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             e.printStackTrace();
         }
 
-        markerList = new LinkedList<>();
+
+        mSlideView = findViewById(R.id.miniBar);
+
+        mEditText = findViewById(R.id.searchBar);
+
+        mEditText.setOnFocusChangeListener(focusListener);
+
+        reviewDataBase = new HashMap<>();
     }
 
 
@@ -97,9 +106,45 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+
+                //deleteAndHide();
+
+                ArrayList<Review> markerReview = reviewDataBase.get(marker.getTitle());
+
+                if(markerReview != null && markerReview.size() > 0){
+
+                    obtainReviews( markerReview );
+                }
+
+                mSlideView.setVisibility(View.VISIBLE);
+
+                return false;
+            }
+        });
+
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                deleteAndHide();
+                releaseFocus();
+            }
+        });
+
+        mMap.setOnCameraMoveListener(new GoogleMap.OnCameraMoveListener() {
+            @Override
+            public void onCameraMove() {
+                releaseFocus();
+            }
+        });
+
+
         getLocation();
 
     }
+
 
     //Locates the current location for the user and moves the map to the location
     private void getLocation(){
@@ -180,7 +225,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     for (int i = 0; i < searchResponse.getBusinesses().size(); i++){
                         Business tempBusiness = searchResponse.getBusinesses().get(i);
 
-                        Log.e("name", tempBusiness.getName());
 
                         Coordinates coordinates =  tempBusiness.getCoordinates();
                         String companyName = tempBusiness.getName();
@@ -195,7 +239,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                             @Override
                             public void onResponse(ArrayList<Review> response) {
+
                                 setColorAndPost(marker, response, "this");
+
                             }
 
                         };
@@ -222,12 +268,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void setColorAndPost(MarkerOptions marker, ArrayList<Review> busRew, String search){
 
+
         for (int i = 0; i < busRew.size(); i++){
+
 
             String reviewContent = busRew.get(i).getText().toLowerCase();
             search = search.toLowerCase();
-
-            Log.e("text", reviewContent);
 
             boolean contains = reviewContent.contains(search);
 
@@ -236,13 +282,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         }
 
-        markerList.add(marker);
+        reviewDataBase.put(marker.getTitle(), busRew);
         mMap.addMarker(marker);
 
     }
 
+    private void obtainReviews(ArrayList<Review> busRew) {
+
+        for(int i = 0; i < busRew.size(); i++) {
+
+            Review tempReview = busRew.get(i);
+
+            String reviewer = tempReview.getUser().getName();
+            String reviewContent = tempReview.getText();
+
+            mSlideView.createAndAdd(reviewer, reviewContent);
+        }
+    }
+
     public void deleteMarkers(){
 
+        reviewDataBase.clear();
         mMap.clear();
         getLocation();
 
@@ -271,6 +331,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     }
 
+    public void deleteAndHide(){
+
+        mSlideView.removeAllViews();
+        mSlideView.setVisibility(View.GONE);
+
+    }
+
+    public void releaseFocus(){
+        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+        findViewById(R.id.mainLayout).requestFocus();
+    }
+
     //Prints a msg as a toast
     public static void printToast(String m, Context context){
 
@@ -280,9 +354,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     public void searchPressed(View v){
 
-        EditText editText = findViewById(R.id.searchBar);
-
-        String text = editText.getText().toString();
+        String text = mEditText.getText().toString();
 
         if(text.isEmpty()){
             printToast("Search bar is empty", this);
@@ -291,9 +363,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             yelpMarker(text);
         }
 
-        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-
+        releaseFocus();
 
     }
+
+    private View.OnFocusChangeListener focusListener = new View.OnFocusChangeListener() {
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (hasFocus) {
+                deleteAndHide();
+            }
+        }
+    };
+
 }

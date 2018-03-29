@@ -52,15 +52,22 @@ public class SlideView extends ScrollView {
 
         addView(mlinearLayout);
 
-        for(int i = 0; i < 5; i++){
-            Button button =  new Button(getContext());
-            button.setLayoutParams(params);
+    }
 
-            mlinearLayout.addView(button);
-        }
+    public void createAndAdd(String name, String review){
+
+        ReviewLayout rLayout = new ReviewLayout(getContext(), name, review);
+
+        mlinearLayout.addView(rLayout);
 
     }
 
+    @Override
+    public void removeAllViews() {
+
+        mlinearLayout.removeAllViews();
+
+    }
 
     @Override
     protected void onDraw(Canvas canvas) {
